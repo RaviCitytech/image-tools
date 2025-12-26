@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageTools - Free Online Image Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Third Party Libraries (CDNs) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>ImageTools</span>
+            </div>
+            <nav>
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <!-- Dynamic Content Will Be Loaded Here -->
+        </main>
+
+        <footer>
+            <p>&copy; 2024 ImageTools. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- App Logic - Loaded sequentially -->
+    <script src="./src/utils.js"></script>
+    <script src="./src/tools/resize.js"></script>
+    <script src="./src/tools/crop.js"></script>
+    <script src="./src/tools/compress.js"></script>
+    <script src="./src/tools/convert.js"></script>
+    <script src="./src/tools/rotate.js"></script>
+    <script src="./src/tools/watermark.js"></script>
+    <script src="./src/tools/filter.js"></script>
+    <script src="./src/main.js"></script>
+</body>
+
+</html>
