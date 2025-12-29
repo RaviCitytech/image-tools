@@ -6,7 +6,8 @@ window.Tools.crop = {
         let cropper = null;
         let originalFile = null;
 
-        window.AppUtils.setupUpload(uploadArea, async (file) => {
+        window.AppUtils.setupUpload(uploadArea, async (files) => {
+            const file = files[0];
             originalFile = file;
             const img = await window.AppUtils.loadImage(file);
             showEditor(img);
