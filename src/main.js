@@ -1,54 +1,18 @@
-// Main Entry Point
-// No imports, uses globals from window.Tools and window.AppUtils
+// Main Entry Point - Home Page Only
 
-const ROUTES = {
-    HOME: 'home',
-    RESIZE: 'resize',
-    CROP: 'crop',
-    COMPRESS: 'compress',
-    CONVERT: 'convert',
-    ROTATE: 'rotate',
-    WATERMARK: 'watermark',
-    FILTER: 'filter'
-};
+function renderHome() {
+    const container = document.getElementById('main-content');
+    container.innerHTML = '';
 
-const state = {
-    currentRoute: ROUTES.HOME,
-    file: null,
-    processedFile: null
-};
-
-// Simple router
-function navigate(route) {
-    state.currentRoute = route;
-    if (route === ROUTES.HOME) {
-        state.file = null;
-        state.processedFile = null;
-    }
-    render();
-}
-
-function render() {
-    const main = document.getElementById('main-content');
-    main.innerHTML = '';
-
-    if (state.currentRoute === ROUTES.HOME) {
-        renderHome(main);
-    } else {
-        renderTool(main, state.currentRoute);
-    }
-}
-
-function renderHome(container) {
     const tools = [
-        { id: ROUTES.RESIZE, name: 'Resize Image Online', icon: 'fa-expand', desc: 'Resize images online free with bulk processing. Change dimensions of multiple images at once while maintaining quality.' },
-        { id: ROUTES.CROP, name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Crop JPG, PNG, GIF, and WEBP images online. Perfect cropping tool with aspect ratio presets for social media.' },
-        { id: ROUTES.COMPRESS, name: 'Compress Image', icon: 'fa-compress', desc: 'Compress images online to reduce file size. Bulk image compression with adjustable quality for JPG and PNG files.' },
-        { id: ROUTES.CONVERT, name: 'Convert to JPG', icon: 'fa-image', desc: 'Convert PNG to JPG, GIF to JPG, WEBP to JPG online free. Batch image format converter supporting all major formats.' },
-        { id: ROUTES.ROTATE, name: 'Rotate Image', icon: 'fa-rotate-right', desc: 'Rotate images online 90, 180, 270 degrees. Flip images horizontally or vertically with one click.' },
-        { id: ROUTES.WATERMARK, name: 'Add Watermark', icon: 'fa-stamp', desc: 'Add text watermark or image watermark to photos online. Protect your images with customizable watermarks.' },
-        { id: ROUTES.FILTER, name: 'Photo Editor', icon: 'fa-wand-magic-sparkles', desc: 'Online photo editor with filters. Apply grayscale, sepia, blur, contrast, brightness, and invert effects to images.' },
-        { id: 'webp-tool', name: 'Convert to WEBP', icon: 'fa-file-image', desc: 'Convert JPG, PNG to WEBP online. Dedicated tool for fast and free WebP conversion.', isExternal: true, link: 'jpg-png-to-webp-v4.html' }
+        { id: 'resize', name: 'Resize Image Online', icon: 'fa-expand', desc: 'Resize images online free with bulk processing. Change dimensions of multiple images at once while maintaining quality.', link: 'resize.html' },
+        { id: 'crop', name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Crop JPG, PNG, GIF, and WEBP images online. Perfect cropping tool with aspect ratio presets for social media.', link: 'crop.html' },
+        { id: 'compress', name: 'Compress Image', icon: 'fa-compress', desc: 'Compress images online to reduce file size. Bulk image compression with adjustable quality for JPG and PNG files.', link: 'compress.html' },
+        { id: 'convert', name: 'Convert to JPG', icon: 'fa-image', desc: 'Convert PNG to JPG, GIF to JPG, WEBP to JPG online free. Batch image format converter supporting all major formats.', link: 'convert.html' },
+        { id: 'rotate', name: 'Rotate Image', icon: 'fa-rotate-right', desc: 'Rotate images online 90, 180, 270 degrees. Flip images horizontally or vertically with one click.', link: 'rotate.html' },
+        { id: 'watermark', name: 'Add Watermark', icon: 'fa-stamp', desc: 'Add text watermark or image watermark to photos online. Protect your images with customizable watermarks.', link: 'watermark.html' },
+        { id: 'filter', name: 'Photo Editor', icon: 'fa-wand-magic-sparkles', desc: 'Online photo editor with filters. Apply grayscale, sepia, blur, contrast, brightness, and invert effects to images.', link: 'filter.html' },
+        { id: 'webp-tool', name: 'Convert to WEBP', icon: 'fa-file-image', desc: 'Convert JPG, PNG to WEBP online. Dedicated tool for fast and free WebP conversion.', link: 'jpg-png-to-webp-v4.html' }
     ];
 
     const hero = document.createElement('div');
@@ -77,11 +41,7 @@ function renderHome(container) {
             <p class="card-desc" itemprop="description">${tool.desc}</p>
         `;
         card.onclick = () => {
-            if (tool.isExternal) {
-                window.location.href = tool.link;
-            } else {
-                navigate(tool.id);
-            }
+            window.location.href = tool.link;
         };
         grid.appendChild(card);
     });
@@ -131,42 +91,7 @@ function renderHome(container) {
     container.appendChild(seoSection);
 }
 
-function renderTool(container, toolType) {
-    // Basic Layout
-    // For bulk supported tools, we update the instruction slightly
-    const isBulkSupported = [ROUTES.RESIZE, ROUTES.COMPRESS, ROUTES.CONVERT].includes(toolType);
-
-    container.innerHTML = `
-        <div class="tool-container">
-            <div style="margin-bottom: 2rem;">
-                <button id="back-btn" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
-            </div>
-            <h2 id="tool-title" style="margin-bottom: 1rem; text-transform: capitalize;">${toolType} Image</h2>
-            
-            <div id="upload-area" class="drop-zone">
-                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3>Select image${isBulkSupported ? 's' : ''}</h3>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">or drag and drop ${isBulkSupported ? 'them' : 'it'} here</p>
-                ${isBulkSupported ? '<p style="font-size: 0.8rem; color: var(--primary); margin-top: 1rem;">Bulk processing supported!</p>' : ''}
-            </div>
-
-            <div id="editor-area" class="hidden">
-            </div>
-        </div>
-    `;
-
-    document.getElementById('back-btn').onclick = () => navigate(ROUTES.HOME);
-
-    // Call Global Tool logic
-    if (window.Tools && window.Tools[toolType]) {
-        window.Tools[toolType].init(document.getElementById('upload-area'), document.getElementById('editor-area'), state);
-    } else {
-        container.innerHTML += `<div class="alert">Tool not found.</div>`;
-    }
-}
-
 // Init
 window.addEventListener('DOMContentLoaded', () => {
-    render();
-    document.querySelector('.logo').onclick = () => navigate(ROUTES.HOME);
+    renderHome();
 });

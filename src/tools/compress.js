@@ -62,12 +62,15 @@ window.Tools.compress = {
             const valDisplay = document.createElement('span');
             valDisplay.style.float = 'right';
 
+            // Create a text node for the label text so we don't overwrite the child span
+            const labelText = document.createTextNode('JPEG Quality');
+            qualityLabel.appendChild(labelText);
+            qualityLabel.appendChild(valDisplay);
+
             const updateLabel = () => {
-                qualityLabel.innerText = 'JPEG Quality';
                 valDisplay.innerText = qualityInput.value + '%';
             };
             updateLabel();
-            qualityLabel.appendChild(valDisplay);
 
             qualityInput.oninput = updateLabel;
             qualityContainer.append(qualityLabel, qualityInput);

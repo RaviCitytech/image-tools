@@ -52,7 +52,10 @@ window.Tools.filter = {
                 { name: 'Invert', val: 'invert(100%)' },
                 { name: 'Blur', val: 'blur(5px)' },
                 { name: 'Brightness', val: 'brightness(150%)' },
-                { name: 'Contrast', val: 'contrast(150%)' }
+                { name: 'Contrast', val: 'contrast(150%)' },
+                { name: 'Hue Rotate', val: 'hue-rotate(90deg)' },
+                { name: 'Saturate', val: 'saturate(200%)' },
+                { name: 'Vintage', val: 'sepia(50%) contrast(120%)' }
             ];
 
             const btnContainer = document.createElement('div');

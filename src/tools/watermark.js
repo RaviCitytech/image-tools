@@ -35,6 +35,7 @@ window.Tools.watermark = {
                 size: 40,
                 color: '#ffffff',
                 opacity: 0.5,
+                rotation: 0,
                 x: 50, // Percentage
                 y: 50
             };
@@ -55,7 +56,12 @@ window.Tools.watermark = {
                 const posX = (wmState.x / 100) * canvas.width;
                 const posY = (wmState.y / 100) * canvas.height;
 
-                ctx.fillText(wmState.text, posX, posY);
+                ctx.translate(posX, posY);
+                ctx.rotate((wmState.rotation * Math.PI) / 180);
+
+                // Draw text at 0,0 relative to translated origin
+                ctx.fillText(wmState.text, 0, 0);
+
                 ctx.restore();
             }
             // Initial draw
@@ -66,11 +72,12 @@ window.Tools.watermark = {
 
             // Controls
             const textInput = createInput('Text', 'text', wmState.text, (v) => { wmState.text = v; draw(); });
-            const sizeInput = createInput('Size', 'number', wmState.size, (v) => { wmState.size = parseInt(v); draw(); });
+            const sizeInput = createInput('Size (px)', 'number', wmState.size, (v) => { wmState.size = parseInt(v); draw(); });
             const colorInput = createInput('Color', 'color', wmState.color, (v) => { wmState.color = v; draw(); });
             const opacityInput = createRange('Opacity', 0, 1, 0.1, wmState.opacity, (v) => { wmState.opacity = parseFloat(v); draw(); });
-            const xInput = createRange('Position X', 0, 100, 1, wmState.x, (v) => { wmState.x = parseInt(v); draw(); });
-            const yInput = createRange('Position Y', 0, 100, 1, wmState.y, (v) => { wmState.y = parseInt(v); draw(); });
+            const rotateInput = createRange('Rotation (deg)', 0, 360, 1, wmState.rotation, (v) => { wmState.rotation = parseInt(v); draw(); });
+            const xInput = createRange('Position X (%)', 0, 100, 1, wmState.x, (v) => { wmState.x = parseInt(v); draw(); });
+            const yInput = createRange('Position Y (%)', 0, 100, 1, wmState.y, (v) => { wmState.y = parseInt(v); draw(); });
 
             const saveBtn = document.createElement('button');
             saveBtn.className = 'btn';
@@ -83,7 +90,7 @@ window.Tools.watermark = {
                 }, originalFile.type);
             };
 
-            sidebar.append(textInput, sizeInput, colorInput, opacityInput, xInput, yInput, saveBtn);
+            sidebar.append(textInput, sizeInput, colorInput, opacityInput, rotateInput, xInput, yInput, saveBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }
