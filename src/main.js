@@ -5,25 +5,23 @@ function renderHome() {
     container.innerHTML = '';
 
     const tools = [
-        { id: 'resize', name: 'Resize Image Online', icon: 'fa-expand', desc: 'Resize images online free with bulk processing. Change dimensions of multiple images at once while maintaining quality.', link: 'resize.html' },
-        { id: 'crop', name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Crop JPG, PNG, GIF, and WEBP images online. Perfect cropping tool with aspect ratio presets for social media.', link: 'crop.html' },
-        { id: 'compress', name: 'Compress Image', icon: 'fa-compress', desc: 'Compress images online to reduce file size. Bulk image compression with adjustable quality for JPG and PNG files.', link: 'compress.html' },
-        { id: 'convert', name: 'Convert to JPG', icon: 'fa-image', desc: 'Convert PNG to JPG, GIF to JPG, WEBP to JPG online free. Batch image format converter supporting all major formats.', link: 'convert.html' },
-        { id: 'rotate', name: 'Rotate Image', icon: 'fa-rotate-right', desc: 'Rotate images online 90, 180, 270 degrees. Flip images horizontally or vertically with one click.', link: 'rotate.html' },
-        { id: 'watermark', name: 'Add Watermark', icon: 'fa-stamp', desc: 'Add text watermark or image watermark to photos online. Protect your images with customizable watermarks.', link: 'watermark.html' },
-        { id: 'filter', name: 'Photo Editor', icon: 'fa-wand-magic-sparkles', desc: 'Online photo editor with filters. Apply grayscale, sepia, blur, contrast, brightness, and invert effects to images.', link: 'filter.html' },
-        { id: 'webp-tool', name: 'Convert to WEBP', icon: 'fa-file-image', desc: 'Convert JPG, PNG to WEBP online. Dedicated tool for fast and free WebP conversion.', link: 'jpg-png-to-webp-v4.html' }
+        { id: 'resize', name: 'Resize Image', icon: 'fa-expand', desc: 'Change dimensions while maintaining quality.', link: 'resize.html' },
+        { id: 'crop', name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Perfect cropping tool with aspect ratio presets.', link: 'crop.html' },
+        { id: 'compress', name: 'Compress', icon: 'fa-compress', desc: 'Reduce file size with adjustable quality.', link: 'compress.html' },
+        { id: 'convert', name: 'Convert Format', icon: 'fa-image', desc: 'Convert between JPG, PNG, WEBP, and more.', link: 'convert.html' },
+        { id: 'rotate', name: 'Rotate & Flip', icon: 'fa-rotate-right', desc: 'Rotate 90°/180° or flip images instantly.', link: 'rotate.html' },
+        { id: 'watermark', name: 'Watermark', icon: 'fa-stamp', desc: 'Protect images with text or logo watermarks.', link: 'watermark.html' },
+        { id: 'filter', name: 'Filters', icon: 'fa-wand-magic-sparkles', desc: 'Apply grayscale, sepia, and other effects.', link: 'filter.html' },
+        { id: 'webp-tool', name: 'WEBP Converter', icon: 'fa-file-image', desc: 'Dedicated tool for fast WebP conversion.', link: 'jpg-png-to-webp-v4.html' }
     ];
 
     const hero = document.createElement('div');
-    hero.style.textAlign = 'center';
-    hero.style.marginBottom = '4rem';
+    hero.className = 'hero';
     hero.innerHTML = `
-        <h1 style="font-size: 3.5rem; margin-bottom: 1rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            Free Online Image Editor - Professional Photo Editing Tools
-        </h1>
-        <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto;">
-            Edit images online free with our powerful image editing tools. Resize, crop, compress, convert, rotate, watermark, and apply filters to your photos. No signup required. 100% free forever with bulk processing support.
+        <h1>Professional Image Tools</h1>
+        <p>
+            Secure, client-side image editing. No uploads, no signups, no limits.
+            <br>The way it should be.
         </p>
     `;
 
@@ -35,6 +33,15 @@ function renderHome() {
         card.className = 'card';
         card.setAttribute('itemscope', '');
         card.setAttribute('itemtype', 'https://schema.org/SoftwareApplication');
+        // Added onmousemove for the glow effect tracking
+        card.onmousemove = (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        };
+
         card.innerHTML = `
             <div class="card-icon"><i class="fa-solid ${tool.icon}" aria-hidden="true"></i></div>
             <h2 class="card-title" itemprop="name">${tool.name}</h2>
@@ -48,40 +55,35 @@ function renderHome() {
 
     // Add SEO content section
     const seoSection = document.createElement('section');
-    seoSection.style.marginTop = '5rem';
-    seoSection.style.maxWidth = '900px';
-    seoSection.style.margin = '5rem auto 0';
-    seoSection.style.padding = '0 2rem';
+    seoSection.className = 'seo-section';
     seoSection.innerHTML = `
-        <div style="text-align: center; margin-bottom: 3rem;">
-            <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--text);">Why Choose ImageTools?</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                ImageTools is a completely free online image editor that works entirely in your browser. 
-                No software installation, no account creation, and no file uploads to servers. 
-                Your images stay private and secure on your device while you edit them with professional-grade tools.
+        <div class="seo-header">
+            <h2>Why ImageTools?</h2>
+            <p>
+                Built for privacy and performance. All processing happens locally in your browser leveraging WebAssembly and modern Canvas APIs.
             </p>
         </div>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-            <div style="text-align: center;">
-                <i class="fa-solid fa-shield-halved" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text);">100% Private</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">All processing happens in your browser. Your images never leave your device.</p>
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fa-solid fa-shield-halved feature-icon"></i>
+                <h3 class="feature-title">100% Private</h3>
+                <p class="feature-desc">Your images never leave your device.</p>
             </div>
-            <div style="text-align: center;">
-                <i class="fa-solid fa-infinity" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text);">Unlimited Usage</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Edit unlimited images with no restrictions. Completely free forever.</p>
+            <div class="feature-item">
+                <i class="fa-solid fa-infinity feature-icon"></i>
+                <h3 class="feature-title">Unlimited</h3>
+                <p class="feature-desc">No daily limits or premium walls.</p>
             </div>
-            <div style="text-align: center;">
-                <i class="fa-solid fa-layer-group" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text);">Bulk Processing</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Process multiple images at once with our batch editing tools.</p>
+            <div class="feature-item">
+                <i class="fa-solid fa-layer-group feature-icon"></i>
+                <h3 class="feature-title">Bulk Actions</h3>
+                <p class="feature-desc">Process hundreds of images at once.</p>
             </div>
-            <div style="text-align: center;">
-                <i class="fa-solid fa-bolt" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text);">Lightning Fast</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">No server uploads means instant processing and editing.</p>
+            <div class="feature-item">
+                <i class="fa-solid fa-bolt feature-icon"></i>
+                <h3 class="feature-title">Instant</h3>
+                <p class="feature-desc">Zero latency. No server queue.</p>
             </div>
         </div>
     `;

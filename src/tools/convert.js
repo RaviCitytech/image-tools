@@ -30,9 +30,10 @@ window.Tools.convert = {
                 badge.style.top = '10px';
                 badge.style.right = '10px';
                 badge.style.background = 'var(--primary)';
-                badge.style.color = 'white';
+                badge.style.color = 'var(--background)';
                 badge.style.padding = '5px 10px';
                 badge.style.borderRadius = '20px';
+                badge.style.fontWeight = 'bold';
                 badge.innerText = `+${originalFiles.length - 1} more files`;
                 previewArea.appendChild(badge);
             }

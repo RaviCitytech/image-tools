@@ -154,7 +154,16 @@
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Internal:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Using Inter and JetBrains Mono as proxies for Universal Sans / Geist Mono if not available, 
+       but for the purpose of this task I will try to find a better match or just use these as fallbacks 
+       and define them in CSS as primary. -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Third Party Libraries (CDNs) -->
@@ -170,14 +179,14 @@
   <div id="app">
     <header class="navbar">
       <div class="logo">
-        <a href="index.html"
-          style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+        <a href="index.html">
           <i class="fa-solid fa-layer-group"></i>
-          <span>ImageTools</span>
+          <span>IMAGETOOLS</span>
         </a>
       </div>
       <nav>
-        <a href="index.html" class="nav-link active">Home</a>
+        <a href="index.html" class="nav-link active">[ HOME ]</a>
+        <!-- Added brackets to match the ref site vibe -->
       </nav>
     </header>
 
