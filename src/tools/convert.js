@@ -93,7 +93,14 @@ window.Tools.convert = {
                 }
             };
 
-            sidebar.append(formatContainer, convertBtn);
+            const convertAnotherBtn = document.createElement('button');
+            convertAnotherBtn.className = 'btn btn-secondary';
+            convertAnotherBtn.innerText = 'Convert Another';
+            convertAnotherBtn.style.marginTop = '0.5rem';
+            convertAnotherBtn.style.width = '100%';
+            convertAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(formatContainer, convertBtn, convertAnotherBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }

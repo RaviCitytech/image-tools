@@ -97,6 +97,14 @@ window.Tools.crop = {
             sidebar.appendChild(qualityGroup);
             sidebar.appendChild(cropBtn);
 
+            const cropAnotherBtn = document.createElement('button');
+            cropAnotherBtn.className = 'btn btn-secondary';
+            cropAnotherBtn.innerText = 'Crop Another';
+            cropAnotherBtn.style.marginTop = '0.5rem';
+            cropAnotherBtn.style.width = '100%';
+            cropAnotherBtn.onclick = () => location.reload();
+            sidebar.appendChild(cropAnotherBtn);
+
             cropBtn.onclick = () => {
                 const canvas = cropper.getCroppedCanvas();
                 const quality = parseInt(qualityInput.value) / 100;

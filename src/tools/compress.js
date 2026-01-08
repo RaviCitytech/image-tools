@@ -91,7 +91,14 @@ window.Tools.compress = {
                 }
             };
 
-            sidebar.append(qualityContainer, compressBtn);
+            const compressAnotherBtn = document.createElement('button');
+            compressAnotherBtn.className = 'btn btn-secondary';
+            compressAnotherBtn.innerText = 'Compress Another';
+            compressAnotherBtn.style.marginTop = '0.5rem';
+            compressAnotherBtn.style.width = '100%';
+            compressAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(qualityContainer, compressBtn, compressAnotherBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }

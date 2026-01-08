@@ -9,7 +9,7 @@ function renderHome() {
         { id: 'crop', name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Perfect cropping tool with aspect ratio presets.', link: 'crop.html' },
         { id: 'compress', name: 'Compress', icon: 'fa-compress', desc: 'Reduce file size with adjustable quality.', link: 'compress.html' },
         { id: 'convert', name: 'Convert Format', icon: 'fa-image', desc: 'Convert between JPG, PNG, WEBP, and more.', link: 'convert.html' },
-        { id: 'rotate', name: 'Rotate & Flip', icon: 'fa-rotate-right', desc: 'Rotate 90°/180° or flip images instantly.', link: 'rotate.html' },
+        { id: 'rotate', name: 'Rotate & Mirror', icon: 'fa-rotate-right', desc: 'Rotate 90°/180° or mirror images instantly.', link: 'rotate.html' },
         { id: 'watermark', name: 'Watermark', icon: 'fa-stamp', desc: 'Protect images with text or logo watermarks.', link: 'watermark.html' },
         { id: 'filter', name: 'Filters', icon: 'fa-wand-magic-sparkles', desc: 'Apply grayscale, sepia, and other effects.', link: 'filter.html' },
         { id: 'webp-tool', name: 'WEBP Converter', icon: 'fa-file-image', desc: 'Dedicated tool for fast WebP conversion.', link: 'jpg-png-to-webp-v4.html' }

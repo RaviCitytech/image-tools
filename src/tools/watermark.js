@@ -90,7 +90,14 @@ window.Tools.watermark = {
                 }, originalFile.type);
             };
 
-            sidebar.append(textInput, sizeInput, colorInput, opacityInput, rotateInput, xInput, yInput, saveBtn);
+            const watermarkAnotherBtn = document.createElement('button');
+            watermarkAnotherBtn.className = 'btn btn-secondary';
+            watermarkAnotherBtn.innerText = 'Watermark Another';
+            watermarkAnotherBtn.style.marginTop = '0.5rem';
+            watermarkAnotherBtn.style.width = '100%';
+            watermarkAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(textInput, sizeInput, colorInput, opacityInput, rotateInput, xInput, yInput, saveBtn, watermarkAnotherBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }

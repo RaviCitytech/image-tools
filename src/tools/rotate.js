@@ -67,8 +67,8 @@ window.Tools.rotate = {
             const actions = [
                 { icon: 'fa-rotate-left', label: 'Left', fn: () => rotation -= 90 },
                 { icon: 'fa-rotate-right', label: 'Right', fn: () => rotation += 90 },
-                { icon: 'fa-arrows-left-right', label: 'Flip H', fn: () => scaleX *= -1 },
-                { icon: 'fa-arrows-up-down', label: 'Flip V', fn: () => scaleY *= -1 },
+                { icon: 'fa-arrows-left-right', label: 'Mirror H', fn: () => scaleX *= -1 },
+                { icon: 'fa-arrows-up-down', label: 'Mirror V', fn: () => scaleY *= -1 },
             ];
 
             actions.forEach(act => {
@@ -93,7 +93,14 @@ window.Tools.rotate = {
                 }, originalFile.type);
             };
 
-            sidebar.append(btnGroup, saveBtn);
+            const rotateAnotherBtn = document.createElement('button');
+            rotateAnotherBtn.className = 'btn btn-secondary';
+            rotateAnotherBtn.innerText = 'Rotate Another';
+            rotateAnotherBtn.style.marginTop = '0.5rem';
+            rotateAnotherBtn.style.width = '100%';
+            rotateAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(btnGroup, saveBtn, rotateAnotherBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }

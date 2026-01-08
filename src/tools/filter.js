@@ -85,7 +85,14 @@ window.Tools.filter = {
                 }, originalFile.type);
             };
 
-            sidebar.append(btnContainer, saveBtn);
+            const filterAnotherBtn = document.createElement('button');
+            filterAnotherBtn.className = 'btn btn-secondary';
+            filterAnotherBtn.innerText = 'Filter Another';
+            filterAnotherBtn.style.marginTop = '0.5rem';
+            filterAnotherBtn.style.width = '100%';
+            filterAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(btnContainer, saveBtn, filterAnotherBtn);
             layout.append(previewArea, sidebar);
             editorArea.appendChild(layout);
         }

@@ -61,7 +61,14 @@ window.Tools.resize = {
             processBtn.style.marginTop = '1rem';
             processBtn.style.width = '100%';
 
-            sidebar.append(widthInput.container, heightInput.container, ratioCheck.container, processBtn);
+            const resizeAnotherBtn = document.createElement('button');
+            resizeAnotherBtn.className = 'btn btn-secondary';
+            resizeAnotherBtn.innerText = 'Resize Another';
+            resizeAnotherBtn.style.marginTop = '0.5rem';
+            resizeAnotherBtn.style.width = '100%';
+            resizeAnotherBtn.onclick = () => location.reload();
+
+            sidebar.append(widthInput.container, heightInput.container, ratioCheck.container, processBtn, resizeAnotherBtn);
 
             const wIn = widthInput.input;
             const hIn = heightInput.input;
