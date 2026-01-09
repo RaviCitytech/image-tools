@@ -90,6 +90,39 @@ function renderHome() {
 
     container.appendChild(hero);
     container.appendChild(grid);
+
+    // Request a Tool Section
+    const requestSection = document.createElement('div');
+    requestSection.className = 'request-section';
+    requestSection.style.textAlign = 'center';
+    requestSection.style.margin = '4rem 0';
+
+    // Construct Mailto Link
+    const email = 'Ravi.Raushan@citytechsoftware.com';
+    const subject = encodeURIComponent('Feature Request: New Image Tool');
+    const body = encodeURIComponent(`Hi Team,
+
+I would like to request a new tool for ImageTools.
+
+**Tool Name:**
+[Enter tool name here]
+
+**Description/Functionality:**
+[Describe what the tool should do]
+
+**Why is this useful?**
+[Explain the use case]
+
+Thanks!`);
+
+    requestSection.innerHTML = `
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Don't see what you're looking for?</p>
+        <a href="mailto:${email}?subject=${subject}&body=${body}" class="btn">
+            <i class="fa-solid fa-envelope"></i> Request a Tool
+        </a>
+    `;
+    container.appendChild(requestSection);
+
     container.appendChild(seoSection);
 }
 
