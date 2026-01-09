@@ -495,3 +495,36 @@ select:focus {
         grid-template-columns: 1fr;
     }
 }
+
+/* Custom Cursor Follower */
+.cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* Reduced opacity from 0.3 */
+    border-radius: 4px;
+    /* Slight rounded corners matching theme */
+    pointer-events: none;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.01);
+    /* Reduced opacity from 0.03 */
+    /* Subtle fill */
+    backdrop-filter: blur(0px);
+    /* Removed blur for cleaner look */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.02);
+    /* Reduced shadow */
+    transition: opacity 0.3s ease;
+    will-change: transform;
+}
+
+/* Hide default cursor on interactive elements if desired, or just keep both */
+/* For now, we keep the default cursor and just add the follower as an effect */
+
+@media (hover: none) {
+    .cursor-follower {
+        display: none;
+    }
+}
