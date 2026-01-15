@@ -30,7 +30,7 @@ function renderHome() {
 
     tools.forEach(tool => {
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = `card tool-card-${tool.id}`; // Add unique class
         card.setAttribute('itemscope', '');
         card.setAttribute('itemtype', 'https://schema.org/SoftwareApplication');
         // Added onmousemove for the glow effect tracking

@@ -273,7 +273,8 @@ footer {
 
 /* Cards */
 .card {
-    background-color: transparent;
+    background-color: #0a0a0a;
+    /* Opaque to hide global particles */
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 2.5rem 2rem;
@@ -284,8 +285,11 @@ footer {
     align-items: flex-start;
     position: relative;
     overflow: hidden;
+    z-index: 1;
+    /* Ensure it sits above global bg */
 }
 
+/* Unique Background Animations via ::before */
 .card::before {
     content: '';
     position: absolute;
@@ -293,21 +297,21 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
-    opacity: 0;
-    transition: opacity 0.5s;
+    z-index: -1;
+    opacity: 0.12;
+    /* Always visible */
+    transition: opacity 0.5s ease;
     pointer-events: none;
-    z-index: 1;
 }
 
 .card:hover::before {
-    opacity: 1;
+    opacity: 0.25;
+    /* Increase on hover */
 }
 
 .card:hover {
     border-color: var(--border-hover);
     transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.01);
 }
 
 .card-icon {
@@ -340,6 +344,360 @@ footer {
 }
 
 /* Tool UI */
+/* Constants for tool background animations */
+
+/* 1. Resize: Animated Grid */
+.tool-card-resize::before {
+    background-image: linear-gradient(#ffffff 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: panGrid 20s linear infinite;
+}
+
+@keyframes panGrid {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 40px 40px;
+    }
+}
+
+/* 2. Crop: Dashed Border Effect (using mask or simple dashed grid) */
+.tool-card-crop::before {
+    background:
+        linear-gradient(90deg, #ffffff 50%, transparent 50%),
+        linear-gradient(90deg, #ffffff 50%, transparent 50%),
+        linear-gradient(0deg, #ffffff 50%, transparent 50%),
+        linear-gradient(0deg, #ffffff 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 15px 1px, 15px 1px, 1px 15px, 1px 15px;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    animation: borderDance 4s linear infinite;
+}
+
+@keyframes borderDance {
+    100% {
+        background-position: 30px 0, -30px 100%, 0 -30px, 100% 30px;
+    }
+}
+
+/* 3. Compress: Breathing Gradient */
+.tool-card-compress::before {
+    background: radial-gradient(circle, #f472b6, transparent 70%);
+    animation: breathe 3s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+    from {
+        transform: scale(0.8);
+        opacity: 0.1;
+    }
+
+    to {
+        transform: scale(1.2);
+        opacity: 0.2;
+    }
+}
+
+/* 4. Convert: Gradient Shift */
+.tool-card-convert::before {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    animation: shift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes shift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 5. Rotate: Conic Spin */
+.tool-card-rotate::before {
+    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, #a78bfa 180deg, transparent 360deg);
+    animation: spinBg 4s linear infinite;
+}
+
+@keyframes spinBg {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 6. Watermark: Text Pattern (Simulated with lines/dots) */
+.tool-card-watermark::before {
+    background-image: radial-gradient(#2dd4bf 1px, transparent 1px);
+    background-size: 10px 10px;
+    opacity: 0.1;
+}
+
+/* 7. Filter: Hue Rotate Gradient */
+.tool-card-filter::before {
+    background: linear-gradient(to right, #f87171, #ef4444);
+    animation: hueBg 5s linear infinite;
+}
+
+@keyframes hueBg {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* 8. WebP: Pixelation / Matrix */
+.tool-card-webp-tool::before {
+    background-image:
+        linear-gradient(45deg, #fb923c 25%, transparent 25%, transparent 75%, #fb923c 75%, #fb923c),
+        linear-gradient(45deg, #fb923c 25%, transparent 25%, transparent 75%, #fb923c 75%, #fb923c);
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+    opacity: 0.1;
+}
+
+/* Card Entrance Animation */
+.card {
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Stagger delays for entrance */
+.card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.card:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.card:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.card:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+.card:nth-child(8) {
+    animation-delay: 0.45s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Unique Hover Animations */
+
+/* 1. Resize: Expansion/Pulse */
+@keyframes pulseExpand {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tool-card-resize:hover .card-icon {
+    animation: pulseExpand 0.6s ease-in-out infinite;
+    color: #60a5fa;
+    /* Blue */
+}
+
+/* 2. Crop: Shake/Trim */
+@keyframes shakeTrim {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.tool-card-crop:hover .card-icon {
+    animation: shakeTrim 0.5s ease-in-out;
+    color: #4ade80;
+    /* Green */
+}
+
+/* 3. Compress: Squeeze */
+@keyframes squeeze {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    30% {
+        transform: scale(1.25, 0.75);
+    }
+
+    40% {
+        transform: scale(0.75, 1.25);
+    }
+
+    50% {
+        transform: scale(1.15, 0.85);
+    }
+
+    65% {
+        transform: scale(0.95, 1.05);
+    }
+
+    75% {
+        transform: scale(1.05, 0.95);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.tool-card-compress:hover .card-icon {
+    animation: squeeze 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    color: #f472b6;
+    /* Pink */
+}
+
+/* 4. Convert: Morph / Rotate Y */
+@keyframes flipX {
+    0% {
+        transform: perspective(400px) rotateY(0);
+    }
+
+    100% {
+        transform: perspective(400px) rotateY(360deg);
+    }
+}
+
+.tool-card-convert:hover .card-icon {
+    animation: flipX 0.8s ease-in-out;
+    color: #fbbf24;
+    /* Amber */
+}
+
+/* 5. Rotate: Spin */
+@keyframes spinRight {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.tool-card-rotate:hover .card-icon {
+    animation: spinRight 0.8s linear infinite;
+    color: #a78bfa;
+    /* Purple */
+}
+
+/* 6. Watermark: Stamp/FadeIn */
+@keyframes stamp {
+    0% {
+        transform: scale(2);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.tool-card-watermark:hover .card-icon {
+    animation: stamp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #2dd4bf;
+    /* Teal */
+}
+
+/* 7. Filter: Hue Rotate */
+@keyframes hueRotate {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+.tool-card-filter:hover .card-icon {
+    animation: hueRotate 1s linear infinite;
+    color: #f87171;
+    /* Red */
+}
+
+/* 8. WebP: Flash/Blink */
+@keyframes flash {
+
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+    }
+
+    25%,
+    75% {
+        opacity: 0.5;
+    }
+}
+
+.tool-card-webp-tool:hover .card-icon {
+    animation: flash 1s linear infinite;
+    color: #fb923c;
+    /* Orange */
+}
+
 .tool-container {
     max-width: 1200px;
     margin: 0 auto;
