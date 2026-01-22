@@ -23,12 +23,31 @@ window.AppUtils = {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     },
 
-    setupUpload: (dropZoneElement, onFileSelect) => {
+    setupUpload: (dropZoneElement, onFileSelect, acceptType = 'image/*') => {
+        // Determine the file type prefix for filtering
+        const getFileTypePrefix = (accept) => {
+            if (accept === 'application/pdf') return 'application/pdf';
+            if (accept === 'image/*') return 'image/';
+            return accept.split('/')[0] + '/'; // Generic fallback
+        };
+
+        const fileTypePrefix = getFileTypePrefix(acceptType);
+
         const handleFiles = (files) => {
             if (files && files.length > 0) {
-                const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+                const validFiles = Array.from(files).filter(f => {
+                    if (acceptType === 'application/pdf') {
+                        return f.type === 'application/pdf';
+                    } else if (acceptType === 'image/*') {
+                        return f.type.startsWith('image/');
+                    } else {
+                        return f.type.startsWith(fileTypePrefix);
+                    }
+                });
+
                 if (validFiles.length === 0) {
-                    alert('Please upload image files.');
+                    const fileTypeName = acceptType === 'application/pdf' ? 'PDF' : 'image';
+                    alert(`Please upload ${fileTypeName} files.`);
                     return;
                 }
                 onFileSelect(validFiles);
@@ -38,7 +57,7 @@ window.AppUtils = {
         dropZoneElement.addEventListener('click', () => {
             const input = document.createElement('input');
             input.type = 'file';
-            input.accept = 'image/*';
+            input.accept = acceptType;
             input.multiple = true; // Allow multiple
             input.onchange = (e) => handleFiles(e.target.files);
             input.click();
@@ -61,7 +80,16 @@ window.AppUtils = {
     },
 
     downloadBlob: (blob, filename) => {
-        window.saveAs(blob, filename);
+        // Use native download to avoid dependency issues
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        // Increased timeout to ensure download starts before revoking
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
     },
 
     downloadZip: async (files, zipName = 'images.zip') => {
@@ -70,6 +98,6 @@ window.AppUtils = {
             zip.file(file.name, file.blob);
         }
         const content = await zip.generateAsync({ type: "blob" });
-        window.saveAs(content, zipName);
+        window.AppUtils.downloadBlob(content, zipName);
     }
 };

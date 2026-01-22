@@ -4,7 +4,7 @@ function renderHome() {
     const container = document.getElementById('main-content');
     container.innerHTML = '';
 
-    const tools = [
+    const imageTools = [
         { id: 'resize', name: 'Resize Image', icon: 'fa-expand', desc: 'Change dimensions while maintaining quality.', link: 'resize.html' },
         { id: 'crop', name: 'Crop Image', icon: 'fa-crop-simple', desc: 'Perfect cropping tool with aspect ratio presets.', link: 'crop.html' },
         { id: 'compress', name: 'Compress', icon: 'fa-compress', desc: 'Reduce file size with adjustable quality.', link: 'compress.html' },
@@ -15,25 +15,32 @@ function renderHome() {
         { id: 'webp-tool', name: 'WEBP Converter', icon: 'fa-file-image', desc: 'Dedicated tool for fast WebP conversion.', link: 'jpg-png-to-webp-v4.html' }
     ];
 
+    const pdfTools = [
+        { id: 'pdf-merge', name: 'PDF Merge', icon: 'fa-object-group', desc: 'Combine multiple PDFs into one document.', link: 'pdf-merge.html' },
+        { id: 'pdf-split', name: 'PDF Split', icon: 'fa-scissors', desc: 'Separate pages or split into multiple files.', link: 'pdf-split.html' },
+        { id: 'pdf-convert', name: 'PDF Convert', icon: 'fa-file-export', desc: 'Convert PDF to images and vice versa.', link: 'pdf-convert.html' },
+        { id: 'pdf-organize', name: 'Organize Pages', icon: 'fa-list-ol', desc: 'Reorder, rotate, and delete PDF pages.', link: 'pdf-organize.html' },
+        { id: 'pdf-sign', name: 'PDF Sign', icon: 'fa-signature', desc: 'Add digital or electronic signatures.', link: 'pdf-sign.html' },
+        { id: 'pdf-watermark', name: 'PDF Watermark', icon: 'fa-droplet', desc: 'Add or remove watermarks from PDFs.', link: 'pdf-watermark.html' },
+        { id: 'pdf-create', name: 'Create PDF', icon: 'fa-file-circle-plus', desc: 'Create PDF from any file or webpage.', link: 'pdf-create.html' }
+    ];
+
     const hero = document.createElement('div');
     hero.className = 'hero';
     hero.innerHTML = `
-        <h1>Professional Image Tools</h1>
+        <h1>Professional Image & PDF Tools</h1>
         <p>
-            Secure, client-side image editing. No uploads, no signups, no limits.
+            Secure, client-side editing. No uploads, no signups, no limits.
             <br>The way it should be.
         </p>
     `;
 
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-
-    tools.forEach(tool => {
+    // Helper function to create tool cards
+    const createToolCard = (tool, type) => {
         const card = document.createElement('div');
-        card.className = `card tool-card-${tool.id}`; // Add unique class
+        card.className = `card tool-card-${tool.id} ${type}-tool`;
         card.setAttribute('itemscope', '');
         card.setAttribute('itemtype', 'https://schema.org/SoftwareApplication');
-        // Added onmousemove for the glow effect tracking
         card.onmousemove = (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -50,8 +57,48 @@ function renderHome() {
         card.onclick = () => {
             window.location.href = tool.link;
         };
-        grid.appendChild(card);
+        return card;
+    };
+
+    // Image Tools Section
+    const imageSection = document.createElement('section');
+    imageSection.className = 'tools-section';
+
+    const imageHeader = document.createElement('div');
+    imageHeader.className = 'section-header';
+    imageHeader.innerHTML = `
+        <i class="fa-solid fa-image"></i>
+        <h2>Image Tools</h2>
+    `;
+
+    const imageGrid = document.createElement('div');
+    imageGrid.className = 'grid';
+    imageTools.forEach(tool => {
+        imageGrid.appendChild(createToolCard(tool, 'image'));
     });
+
+    imageSection.appendChild(imageHeader);
+    imageSection.appendChild(imageGrid);
+
+    // PDF Tools Section
+    const pdfSection = document.createElement('section');
+    pdfSection.className = 'tools-section';
+
+    const pdfHeader = document.createElement('div');
+    pdfHeader.className = 'section-header';
+    pdfHeader.innerHTML = `
+        <i class="fa-solid fa-file-pdf"></i>
+        <h2>PDF Tools</h2>
+    `;
+
+    const pdfGrid = document.createElement('div');
+    pdfGrid.className = 'grid';
+    pdfTools.forEach(tool => {
+        pdfGrid.appendChild(createToolCard(tool, 'pdf'));
+    });
+
+    pdfSection.appendChild(pdfHeader);
+    pdfSection.appendChild(pdfGrid);
 
     // Add SEO content section
     const seoSection = document.createElement('section');
@@ -89,7 +136,8 @@ function renderHome() {
     `;
 
     container.appendChild(hero);
-    container.appendChild(grid);
+    container.appendChild(imageSection);
+    container.appendChild(pdfSection);
 
     // Request a Tool Section
     const requestSection = document.createElement('div');
