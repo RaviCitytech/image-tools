@@ -190,6 +190,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js" defer></script>
 
   <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/chat.css">
 </head>
 
 <body>
@@ -214,6 +215,11 @@
     </footer>
   </div>
 
+  <!-- Firebase SDKs (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <!-- App Logic - Loaded sequentially -->
   <script src="./src/utils.js"></script>
   <script src="./src/tools/resize.js"></script>
@@ -227,6 +233,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="./src/background-animation.js"></script>
   <script src="./src/main.js"></script>
+
+  <!-- Chat Feature -->
+  <script src="./src/chat-config.js"></script>
+  <script src="./src/chat.js"></script>
 </body>
 
 </html>
