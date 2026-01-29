@@ -110,6 +110,20 @@
     line-height: 1.4;
     position: relative;
     word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.message-username {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 2px;
+}
+
+.message-text {
+    word-wrap: break-word;
 }
 
 .message.sent {
@@ -131,8 +145,10 @@
     font-size: 0.7rem;
     opacity: 0.7;
     margin-top: 4px;
-    display: block;
-    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-end;
 }
 
 .message.sent .message-meta {
@@ -141,6 +157,11 @@
 
 .message.received .message-meta {
     color: var(--text-muted);
+}
+
+.read-receipt {
+    font-size: 0.75rem;
+    opacity: 0.8;
 }
 
 .chat-input-area {

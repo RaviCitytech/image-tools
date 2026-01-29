@@ -1,8 +1,38 @@
 /**
  * Chat & Presence Logic using Firebase Realtime Database
+ * Enhanced with user identification and read receipts
  */
 
 (function () {
+    const COLORS = [
+        '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+        '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'
+    ];
+
+    const ADJECTIVES = ['Happy', 'Cool', 'Swift', 'Bright', 'Wise', 'Bold', 'Quick', 'Calm', 'Brave', 'Smart'];
+    const NOUNS = ['Fox', 'Eagle', 'Tiger', 'Dolphin', 'Panda', 'Wolf', 'Hawk', 'Lion', 'Bear', 'Owl'];
+
+    // Get or create user profile
+    const getUserProfile = () => {
+        let profile = localStorage.getItem('chatUserProfile');
+        if (profile) {
+            return JSON.parse(profile);
+        }
+
+        // Generate new profile
+        const adjective = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+        const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+        profile = {
+            username: `${adjective}${noun}`,
+            color: color
+        };
+
+        localStorage.setItem('chatUserProfile', JSON.stringify(profile));
+        return profile;
+    };
+
     // Wait for Firebase libraries to load
     const initChat = () => {
         if (!window.firebase || !window.firebase.app || !window.firebase.database || !window.firebaseConfig) {
@@ -13,7 +43,7 @@
         // Check if config is still default
         if (window.firebaseConfig.apiKey === "YOUR_API_KEY") {
             console.warn("Firebase config is default. Update src/chat-config.js.");
-            renderPlaceholderUI(); // Show UI but with warning
+            renderPlaceholderUI();
             return;
         }
 
@@ -36,9 +66,9 @@
 
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    // User is signed in.
-                    setupPresence(user.uid, db);
-                    setupChat(db, user.uid);
+                    const profile = getUserProfile();
+                    setupPresence(user.uid, db, profile);
+                    setupChat(db, user.uid, profile);
                 }
             });
 
@@ -128,21 +158,26 @@
         });
     };
 
-    const setupPresence = (uid, db) => {
+    const setupPresence = (uid, db, profile) => {
         const userStatusDatabaseRef = db.ref('/status/' + uid);
         const allStatusRef = db.ref('/status');
         const connectedRef = db.ref('.info/connected');
+        const userProfileRef = db.ref('/users/' + uid);
+
+        // Store user profile
+        userProfileRef.set({
+            username: profile.username,
+            color: profile.color,
+            lastSeen: firebase.database.ServerValue.TIMESTAMP
+        });
 
         connectedRef.on('value', (snap) => {
             if (snap.val() === true) {
-                // We're connected (or reconnected)!
-
-                // When I disconnect, remove this device
                 userStatusDatabaseRef.onDisconnect().remove().then(() => {
-                    // Add this device to my connections list
-                    // this value could contain info about the user!
                     userStatusDatabaseRef.set({
                         state: 'online',
+                        username: profile.username,
+                        color: profile.color,
                         last_changed: firebase.database.ServerValue.TIMESTAMP
                     });
                 });
@@ -160,10 +195,11 @@
         });
     };
 
-    const setupChat = (db, uid) => {
+    const setupChat = (db, uid, profile) => {
         const messagesRef = db.ref('messages');
         const widget = document.getElementById('chat-widget');
         const messagesContainer = document.getElementById('chat-messages');
+        const messageElements = new Map(); // Track message DOM elements
 
         // Limit to last 50 messages
         const recentMessagesQuery = messagesRef.limitToLast(50);
@@ -173,24 +209,94 @@
             messagesRef.push({
                 text: text,
                 sender: uid,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                username: profile.username,
+                color: profile.color,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                readBy: {}
             });
         };
 
         recentMessagesQuery.on('child_added', (snapshot) => {
             const msg = snapshot.val();
-            const div = document.createElement('div');
+            const msgId = snapshot.key;
             const isMe = msg.sender === uid;
 
+            const div = document.createElement('div');
             div.className = `message ${isMe ? 'sent' : 'received'}`;
+            div.dataset.messageId = msgId;
+
+            const usernameSpan = isMe ? '' : `<span class="message-username" style="color: ${msg.color}">${escapeHtml(msg.username)}</span>`;
+
             div.innerHTML = `
-                ${escapeHtml(msg.text)}
-                <span class="message-meta">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                ${usernameSpan}
+                <div class="message-text">${escapeHtml(msg.text)}</div>
+                <span class="message-meta">
+                    ${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    <span class="read-receipt" data-msg-id="${msgId}"></span>
+                </span>
             `;
 
             messagesContainer.appendChild(div);
+            messageElements.set(msgId, div);
             scrollToBottom();
+
+            // Mark as read
+            if (!isMe) {
+                markMessageAsRead(db, msgId, uid);
+            }
+
+            // Listen for read updates
+            messagesRef.child(msgId).child('readBy').on('value', (readSnap) => {
+                updateReadReceipt(msgId, readSnap.val(), isMe);
+            });
         });
+
+        // Mark visible messages as read when chat opens
+        const chatWindow = document.getElementById('chat-window');
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class' && chatWindow.classList.contains('open')) {
+                    markVisibleMessagesAsRead(db, uid);
+                }
+            });
+        });
+        observer.observe(chatWindow, { attributes: true });
+    };
+
+    const markMessageAsRead = (db, msgId, uid) => {
+        db.ref(`messages/${msgId}/readBy/${uid}`).set(true);
+    };
+
+    const markVisibleMessagesAsRead = (db, uid) => {
+        const messages = document.querySelectorAll('.message.received');
+        messages.forEach((msgEl) => {
+            const msgId = msgEl.dataset.messageId;
+            if (msgId) {
+                markMessageAsRead(db, msgId, uid);
+            }
+        });
+    };
+
+    const updateReadReceipt = (msgId, readByData, isMe) => {
+        const receiptEl = document.querySelector(`.read-receipt[data-msg-id="${msgId}"]`);
+        if (!receiptEl) return;
+
+        if (!readByData) {
+            receiptEl.innerHTML = isMe ? '✓' : '';
+            return;
+        }
+
+        const readCount = Object.keys(readByData).length;
+
+        if (isMe) {
+            if (readCount === 0) {
+                receiptEl.innerHTML = '✓';
+            } else if (readCount === 1) {
+                receiptEl.innerHTML = '✓✓';
+            } else {
+                receiptEl.innerHTML = `👁️ ${readCount}`;
+            }
+        }
     };
 
     const scrollToBottom = () => {
@@ -210,9 +316,7 @@
     };
 
     // Load libraries if not present, then init
-    // Ideally these are in head, but if we want to be safe:
     if (typeof firebase === 'undefined') {
-        // Wait a bit or assume they are loading from head
         window.addEventListener('load', initChat);
     } else {
         initChat();
